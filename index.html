@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🎂 25岁生日快乐</title>
+    <title>2026.06.08禾家禾家生日快乐</title>
     <style>
         /* ===================================================
            1. 全局背景与画布
@@ -11,12 +11,12 @@
         body {
             font-family: 'Helvetica Neue', Arial, 'Microsoft YaHei', sans-serif;
             margin: 0;
-            padding: 0 6%; /* 电脑大屏给左右两边留出安全间距，防止卡片贴边 */
+            padding: 0 6%; /* 电脑大屏给左右两边留出安全间距 */
             height: 100dvh; 
             overflow: hidden;
             display: flex;
             justify-content: center; 
-            align-items: center;
+            align-items: center; /* 电脑端默认垂直居中 */
             background-image: url('bg.jpg'); 
             background-size: cover;       
             background-position: center;  
@@ -38,14 +38,12 @@
         #confetti-canvas { z-index: 99px; }
 
         /* ===================================================
-           2. 暖阳暮紫玻璃卡片（大屏靠右露出祁煜，小屏自动居中）
+           2. 暖阳暮紫玻璃卡片布局
            =================================================== */
         .container {
-            /* 融合了衣服的深咖与发色的深紫，营造奢华暮色 */
             background: rgba(36, 26, 36, 0.75); 
             backdrop-filter: blur(14px); 
             -webkit-backdrop-filter: blur(14px);
-            /* 边框采用夕阳落日金的微光 */
             border: 1px solid rgba(247, 197, 142, 0.35); 
             padding: 35px 20px 25px 20px;
             border-radius: 28px;
@@ -61,8 +59,7 @@
             position: relative;
             box-sizing: border-box;
             z-index: 10;
-            /* 大屏幕下自动把左边撑开，让卡片靠右，完美露出左边的人脸 */
-            margin-left: auto; 
+            margin-left: auto; /* 电脑大屏幕下自动靠右 */
         }
 
         /* 首页引导区 */
@@ -119,7 +116,7 @@
             flex-direction: column;
             align-items: center;
             z-index: 10;
-            cursor: pointer; /* 悬浮展示可点击小手 */
+            cursor: pointer;
         }
 
         .candles {
@@ -203,7 +200,7 @@
         .t3-d5 { right: 8%; width: 16px; height: 18px; }
 
         /* ===================================================
-           4. 艺术画室互动区（绘画工具）
+           4. 艺术画室互动区
            =================================================== */
         .art-stage {
             position: relative;
@@ -296,28 +293,46 @@
             100% { transform: translate(0, 0) rotate(0deg); }
         }
 
-        /* 移动端响应式布局 */
+        /* ===================================================
+           ✨ 终极优化：移动端响应式布局（卡片沉底，露出祁煜帅脸）
+           =================================================== */
         @media screen and (max-width: 500px) {
             body { 
                 padding: 0; 
-                /* ✨ 核心修改：在窄屏幕上画面整体向右偏移，精准锁焦左侧祁煜的人脸 */
-                background-position: 22% center; 
+                /* 让背景图微调，把脸部更完美地放在靠上中央 */
+                background-position: 15% center; 
+                /* 关键改动：让手机端的所有内容全部「靠底部对齐」，完美空出上半部分的脸 */
+                align-items: flex-end; 
             } 
-            .container { padding: 25px 15px 20px 15px; margin-left: auto; margin-right: auto; } 
-            h1.letter-title { font-size: 21px; margin-bottom: 10px; }
-            .letter-p { font-size: 13px; margin-bottom: 25px; line-height: 1.8; }
-            .fancy-cake { transform: scale(0.85); margin: 5px auto; }
-            .art-stage { height: 190px; }
-            .tool-1 { font-size: 56px; bottom: 75px; left: 4%; }
-            .tool-2 { font-size: 48px; bottom: 85px; right: 4%; }
-            .tool-3 { font-size: 70px; bottom: -5px; left: 10%; }
-            .tool-4 { font-size: 72px; bottom: -10px; right: 8%; }
-            .tool-5 { font-size: 46px; bottom: 25px; left: 40%; }
+            .container { 
+                padding: 25px 15px 20px 15px; 
+                margin-left: auto; 
+                margin-right: auto; 
+                /* 稍微缩减高度，给手机上方留出更多看脸的空间 */
+                min-height: 480px; 
+                max-height: 75vh; 
+                /* 底部留出25px的安全距离，防止贴死手机底边 */
+                margin-bottom: 25px; 
+            } 
+            h1.letter-title { font-size: 20px; margin-bottom: 8px; }
+            .letter-p { font-size: 13px; margin-bottom: 20px; line-height: 1.7; }
+            .fancy-cake { transform: scale(0.72); margin: 0 auto; } /* 缩小蛋糕防止挤压 */
+            .art-stage { height: 160px; } /* 稍微压缩画具高度 */
+            .tool-1 { font-size: 52px; bottom: 65px; left: 2%; }
+            .tool-2 { font-size: 44px; bottom: 75px; right: 2%; }
+            .tool-3 { font-size: 65px; bottom: -5px; left: 8%; }
+            .tool-4 { font-size: 66px; bottom: -10px; right: 6%; }
+            .tool-5 { font-size: 42px; bottom: 20px; left: 38%; }
             .modal-content { padding: 25px 20px; }
         }
     </style>
 </head>
 <body>
+
+    <!-- ✨ 音乐标签保底：如果想加音乐，把你的mp3文件命名为 bgm.mp3 传到同目录下即可 -->
+    <audio id="bg-music" loop>
+        <source src="bgm.mp3" type="audio/mpeg">
+    </audio>
 
     <!-- 动效画布 -->
     <canvas id="click-canvas"></canvas>
@@ -326,7 +341,7 @@
     <div class="container">
         <!-- 首页 -->
         <div id="intro-area" class="intro-area">
-            <h1 class="letter-title">El Mensaje Secreto</h1>
+            <h1 class="letter-title">Happy Birthday to you❤</h1>
             <p class="letter-p">
                 时光流淌，沉淀下最真挚的心意。<br>
                 这里为你精心封存了一份属于25岁的讯息，<br>
@@ -357,8 +372,8 @@
                 </div>
             </div>
             
-            <h2 style="color: #fce7ca; margin: 5px 0 2px 0; font-size: 19px; text-shadow: 0 1px 4px rgba(0,0,0,0.3);">¡Feliz Cumpleaños!</h2>
-            <p id="hint-text" style="color: #e5ccb8; font-size: 12px; margin: 0 0 5px 0; font-weight: 500; cursor: pointer; transition: color 0.3s;">
+            <h2 style="color: #fce7ca; margin: 3px 0 2px 0; font-size: 17px; text-shadow: 0 1px 4px rgba(0,0,0,0.3);">¡Feliz Cumpleaños!</h2>
+            <p id="hint-text" style="color: #e5ccb8; font-size: 11px; margin: 0 0 5px 0; font-weight: 500; cursor: pointer; transition: color 0.3s;">
                 ✨ 轻轻【点击蛋糕】许下你的25岁心愿吧！
             </p>
             
@@ -387,8 +402,8 @@
         // 数据源与基础逻辑
         // ===================================================
         const dataWishes = [
-            { name: "奶茶", text: "希望你能一直做自己，一直在自己热爱的生活然后逢考必过，答辩顺利。平安喜乐永远伴随你，不止生日快乐，希望你每一天都快乐！" },
-            { name: "🐻老师", text: "祝你永远充满活力！愿你在新的一岁里收获满满的幸福和好运。🎂" },
+           { name: "奶茶", text: "希望你能一直做自己，一直在自己热爱的生活然后逢考必过，答辩顺利。平安喜乐永远伴随你，不止生日快乐，希望你每一天都快乐！" },
+            { name: "🐻", text: "首先祝我们的禾家禾家生日快乐，25岁生日快乐！祝你在未来的生活顺风顺水，一直开心，祝你永远不死ovo。我们的禾家禾家今年也要成功的读完master了，知道你一直觉得很累很紧张，但是你还是成功做到了。希望在未来你也能百战百胜，一直成功" },
             { name: "朋友 C", text: "25岁大快乐呀！愿你的未来像星空一样璀璨，心想事成！🎉" },
             { name: "夜苏苏nakiayayu草草草楚晓雪窈窈杜老师katsu", text: "上一次你过生日还是在去年，今天你又过生日了，过了今天你就长了一岁，虚岁要加两岁，希望你冬天要多穿点不然会冷，饿了要吃饭不然会饿，下雨记得打伞不然要淋湿，渴了要喝水不然会渴，困了就睡觉，不然没精神" },
             { name: "爱你的三草姐", text: "生日快乐🎆🎆🍰🍰🎂🎂🎁 ❤️ 💚 💛 💙 💜 🧡 💖 （放声歌唱🗣🎙 🎼 ）（兴奋爬上树🌴🌲🌳 ）（光翼展开飞行🧚‍♀️ ）（健康♻️ 且适度✅ 地爬行💪 ）（口哨💋 ）（露出很甜🎀 的笑容😁 ）（健康地蠕动👍 ）（3600º ☁️ 螺旋式翻滚🌪 ）（拉着气球🎈 飞向天空🌌 ）（撒下飞吻💋么么么👩🏻‍❤️‍💋‍👩🏻👩🏻‍❤️‍💋‍👩🏻👩🏻‍❤️‍💋‍👩🏻）（展开瞬移魔法💫 来到宝贝面前）（激动💗 地跺脚👣 ）（兴奋地大喊🗣 🔊 ）（高声唱着生日歌🎂 🗣 〰 🎶 〰 🎵 🎼 🎶 〰 ）（献出精心💖 挑选的花束🌸🌷）（娇羞[害羞]地递出🌸🌷）" }
@@ -400,12 +415,16 @@
             document.getElementById('intro-area').style.display = 'none';
             document.getElementById('stage-area').style.display = 'flex';
             
-            // 绑定点击事件：点击提示文字或者直接点击巧克力蛋糕，均可吹灭蜡烛
+            // ✨ 激活背景音乐播放
+            const music = document.getElementById('bg-music');
+            if (music) {
+                music.play().catch(err => console.log("音乐暂未成功播放:", err));
+            }
+
             document.getElementById('hint-text').addEventListener('click', extinguishCandles);
             document.querySelector('.fancy-cake').addEventListener('click', extinguishCandles);
         }
 
-        // 画具盲盒点击逻辑
         function handleToolClick(element, index) {
             if (element.classList.contains('shake-animation')) return;
             element.classList.add('shake-animation');
@@ -425,28 +444,22 @@
             document.getElementById('wishes-modal').style.display = 'none';
         }
 
-        // ===================================================
-        // 核心交互：熄灭蜡烛动画并引发飘落彩带
-        // ===================================================
         function extinguishCandles() {
             if (isExtinguished) return;
             isExtinguished = true;
 
-            // 火焰变烟雾消失
             const candles = document.querySelectorAll('.candle-num');
             candles.forEach(c => c.classList.add('extinguished'));
 
-            // 提示词更新为大团圆状态
             const hint = document.getElementById('hint-text');
-            hint.innerText = "✨ 25岁的烛光已化作心愿，画室彩蛋已全部解锁！";
+            hint.innerText = "✨ 25岁的烛光已化作心愿！";
             hint.style.color = "#fce7ca";
 
-            // 爆开全屏纸屑
             startConfetti();
         }
 
         // ===================================================
-        // 特效一：点击爆开落日暖金/祁煜紫粒子
+        // 特效一：点击发光粒子
         // ===================================================
         const clickCanvas = document.getElementById('click-canvas');
         const ctxClick = clickCanvas.getContext('2d');
@@ -466,12 +479,11 @@
                 this.size = Math.random() * 6 + 4;
                 this.speedX = (Math.random() - 0.5) * 6;
                 this.speedY = (Math.random() - 0.5) * 6;
-                // 色彩提取自：祁煜紫、落日熔金、气泡浅粉
                 const colors = ['rgba(138, 93, 168, 0.8)', 'rgba(252, 231, 202, 0.9)', 'rgba(235, 142, 133, 0.7)', 'rgba(244, 162, 97, 0.8)'];
                 this.color = colors[Math.floor(Math.random() * colors.length)];
                 this.alpha = 1;
                 this.decay = Math.random() * 0.02 + 0.015;
-                this.isStar = Math.random() > 0.6; // 部分粒子演化为小星星
+                this.isStar = Math.random() > 0.6;
             }
             update() {
                 this.x += this.speedX;
@@ -511,7 +523,7 @@
         window.addEventListener('touchstart', handleEvent, {passive: true});
 
         // ===================================================
-        // 特效二：满屏梦幻夕阳彩带纸屑雨
+        // 特效二：满屏彩带
         // ===================================================
         const confettiCanvas = document.getElementById('confetti-canvas');
         const ctxConfetti = confettiCanvas.getContext('2d');
@@ -557,7 +569,6 @@
             }
         }
 
-        // Canvas 统一渲染帧循环
         function animate() {
             ctxClick.clearRect(0, 0, clickCanvas.width, clickCanvas.height);
             for (let i = clickParticles.length - 1; i >= 0; i--) {
