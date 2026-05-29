@@ -374,8 +374,8 @@
         // 数据源与基础逻辑
         // ===================================================
         const dataWishes = [
-            { name: "Wennie", text: "祝你 25 岁生日快乐！愿你新的一岁天天开心，所有实验都能顺利跑通！✨" },
-            { name: "🐻老师", text: "祝你永远充满活力！愿你在新的一岁里收获满满的幸福和好运。🎂" },
+            { name: "朋友a", text: "祝你 25 岁生日快乐！愿你新的一岁天天开心，所有实验都能顺利跑通！✨" },
+            { name: "朋友B", text: "祝你永远充满活力！愿你在新的一岁里收获满满的幸福和好运。🎂" },
             { name: "朋友 C", text: "25岁大快乐呀！愿你的未来像星空一样璀璨，心想事成！🎉" },
             { name: "神秘人 D", text: "新的一岁，愿你像抽到‘命运之轮’一样，迎来充满惊喜的转机与连连好运！🌟" },
             { name: "你的专属彩蛋", text: "生日快乐！这是我特意为你一行行代码敲出来的网页礼物，希望这片充满流光的暗紫深海能让你开心！😊" }
@@ -409,61 +409,6 @@
             document.getElementById('wishes-modal').style.display = 'none';
         }
 
-        // ===================================================
-        // 效果一：麦克风吹气检测
-        // ===================================================
-        function initBlowDetection() {
-            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                navigator.mediaDevices.getUserMedia({ audio: true })
-                .then(function(stream) {
-                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    const analyser = audioContext.createAnalyser();
-                    const microphone = audioContext.createMediaStreamSource(stream);
-                    const javascriptNode = audioContext.createScriptProcessor(2048, 1, 1);
-
-                    analyser.smoothingTimeConstant = 0.3;
-                    analyser.fftSize = 1024;
-
-                    microphone.connect(analyser);
-                    analyser.connect(javascriptNode);
-                    javascriptNode.connect(audioContext.destination);
-
-                    javascriptNode.onaudioprocess = function() {
-                        if (isExtinguished) return;
-                        const array = new Uint8Array(analyser.frequencyBinCount);
-                        analyser.getByteFrequencyData(array);
-                        let values = 0;
-                        const length = array.length;
-                        for (let i = 0; i < length; i++) { values += array[i]; }
-                        const average = values / length;
-
-                        if (average > 65) {
-                            extinguishCandles();
-                            stream.getTracks().forEach(track => track.stop());
-                        }
-                    };
-                })
-                .catch(function(err) {
-                    setTimeout(extinguishCandles, 4000);
-                });
-            } else {
-                setTimeout(extinguishCandles, 4000);
-            }
-        }
-
-        function extinguishCandles() {
-            if (isExtinguished) return;
-            isExtinguished = true;
-
-            const candles = document.querySelectorAll('.candle-num');
-            candles.forEach(c => c.classList.add('extinguished'));
-
-            const hint = document.getElementById('hint-text');
-            hint.innerText = "✨ 25岁的烛光已化作心愿，画室彩蛋已全部解锁！";
-            hint.style.color = "#fce7ca";
-
-            startConfetti();
-        }
 
         // ===================================================
         // 效果二：点击爆开落日暖金粒子
