@@ -299,46 +299,62 @@
         /* ===================================================
            ✨ 手机端终极适配：全景比例不失真，绝不挡脸
            =================================================== */
+        /* ===================================================
+           ✨ 手机端终极适配：全景平铺、无白边、绝不挡脸
+           =================================================== */
         @media screen and (max-width: 500px) {
             body { 
                 padding: 0; 
-                /* 1. ✨ 核心修改：改为 contain，确保横版原图完美等比例缩放，绝对不裁剪脸部和头饰 */
-                background-size: contain; 
-                background-position: center top; 
-                /* 2. 纵向排列：让图片在上面，卡片紧跟在下面 */
+                /* 1. ✨ 让图片重新占满全屏，绝不留白 */
+                background-size: cover; 
+                /* 2. ✨ 将背景重心上移，把祁煜的脸部和上半身顶到手机屏幕最显眼的上半段 */
+                background-position: center 5%; 
+                
                 flex-direction: column;
-                justify-content: flex-end;
+                justify-content: flex-end; /* 让卡片绝对沉底 */
                 align-items: center;
             } 
             .container { 
-                padding: 30px 20px 25px 20px; 
+                padding: 20px 15px 12px 15px; 
                 margin-left: auto; 
                 margin-right: auto; 
-                /* 3. ✨ 核心修改：缩短卡片固定高度，改用自适应内容，防止挤压 */
-                min-height: auto; 
-                height: 50vh; /* 卡片只占屏幕下半段 */
-                max-height: 50vh;
-                width: 92%; /* 稍微加宽一点，让排版更舒展 */
                 
-                /* 4. ✨ 核心修改：利用负数 margin 让卡片微微往上提，和上方的美图产生优雅的物理层叠感 */
-                margin-top: -40px; 
-                margin-bottom: 25px; 
+                /* 3. ✨ 提高卡片的透明度（从0.78降到0.55），变成超高级的微醺磨砂滤镜，让他的衣服线条隐约透过来 */
+                background: rgba(36, 26, 36, 0.55); 
+                backdrop-filter: blur(16px); 
+                -webkit-backdrop-filter: blur(16px);
+                
+                /* 4. ✨ 严格限制卡片高度只占屏幕下半段（42%），绝对不会向上蔓延挡到他的脸 */
+                min-height: auto; 
+                height: 42dvh; 
+                max-height: 42dvh;
+                width: 90%; 
+                
+                /* 5. 沉底安全间距 */
+                margin-top: 0;
+                margin-bottom: 20px; 
                 
                 border-radius: 24px;
-                box-shadow: 0 -15px 40px rgba(0,0,0,0.5), 0 15px 30px rgba(0,0,0,0.6);
+                box-shadow: 0 -5px 30px rgba(0,0,0,0.3), 0 10px 20px rgba(0,0,0,0.5);
             } 
-            h1.letter-title { font-size: 21px; margin-bottom: 12px; }
-            .letter-p { font-size: 13px; margin-bottom: 20px; line-height: 1.8; }
             
-            /* 舞台页内部小组件比例缩放 */
-            .fancy-cake { transform: scale(0.68); margin: -5px auto 0 auto; } 
-            .art-stage { height: 135px; } 
-            .tool-1 { font-size: 46px; bottom: 50px; left: 1%; }
-            .tool-2 { font-size: 38px; bottom: 60px; right: 1%; }
-            .tool-3 { font-size: 55px; bottom: -5px; left: 6%; }
-            .tool-4 { font-size: 55px; bottom: -8px; right: 4%; }
-            .tool-5 { font-size: 36px; bottom: 15px; left: 38%; }
-            .modal-content { padding: 25px 20px; }
+            /* 6. 精简文字排版，压缩垂直空间 */
+            h1.letter-title { font-size: 18px; margin-bottom: 6px; }
+            .letter-p { font-size: 12px; margin-bottom: 12px; line-height: 1.6; }
+            
+            /* 7. ✨ 舞台页组件微调，让大蛋糕和画具在矮卡片里完美舒展 */
+            .fancy-cake { transform: scale(0.62); margin: -15px auto 0 auto; } 
+            h2 { font-size: 15px !important; margin: 0 0 2px 0 !important; }
+            #hint-text { font-size: 10px !important; margin: 0 0 2px 0 !important; }
+            
+            .art-stage { height: 110px; } 
+            .tool-1 { font-size: 40px; bottom: 45px; left: 2%; }
+            .tool-2 { font-size: 34px; bottom: 55px; right: 2%; }
+            .tool-3 { font-size: 50px; bottom: -5px; left: 8%; }
+            .tool-4 { font-size: 50px; bottom: -8px; right: 6%; }
+            .tool-5 { font-size: 32px; bottom: 12px; left: 38%; }
+            
+            .modal-content { padding: 20px 15px; }
         }
     </style>
 </head>
