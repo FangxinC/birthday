@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🎂 25岁生日快乐</title>
+    <style>
+        /* ===================================================
+           1. 全局背景与画布
+           =================================================== */
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            padding: 0 6%; 
+            height: 100dvh; 
+            overflow: hidden;
+            display: flex;
+            justify-content: center; 
+            align-items: center;
+            background-image: url('bg.jpg'); 
+            background-size: cover;       
+            background-position: center;  
+            background-repeat: no-repeat; 
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        /* 粒子与彩带画布 */
+        #click-canvas, #confetti-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; 
+            z-index: 999;
+        }
+        #confetti-canvas { z-index: 99px; }
+
+        /* ===================================================
+           2. 暖阳暮紫玻璃卡片（大屏靠右，小屏居中）
+           =================================================== */
+        .container {
+            background: rgba(36, 26, 36, 0.75); 
+            backdrop-filter: blur(14px); 
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(247, 197, 142, 0.35); 
+            padding: 35px 20px 25px 20px;
+            border-radius: 28px;
+            box-shadow: 0 25px 50px rgba(44, 24, 23, 0.5);
+            text-align: center;
+            max-width: 440px; 
+            width: 100%; 
+            min-height: 560px;
+            max-height: 90vh; 
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            box-sizing: border-box;
+            z-index: 10;
+            margin-left: auto; 
+        }
+
+        /* 首页引导区 */
+        .intro-area { margin: auto 0; }
+        h1.letter-title {
+            font-size: 25px;
+            letter-spacing: 2px;
+            color: #fce7ca; 
+            margin-bottom: 15px;
+            text-shadow: 0 2px 12px rgba(244, 162, 97, 0.5);
+        }
+        .letter-p {
+            color: #e5ccb8; 
+            font-size: 14px;
+            line-height: 1.9;
+            margin-bottom: 35px;
+            font-weight: 500;
+        }
+
+        /* 落日熔金质感按钮 */
+        .enter-btn {
+            background: linear-gradient(45deg, #7c4147, #422129);
+            color: #fdf6ed;
+            font-weight: bold;
+            border: 1px solid rgba(252, 231, 202, 0.3);
+            padding: 13px 45px;
+            font-size: 15px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(54, 22, 28, 0.6);
+            transition: all 0.3s;
+            letter-spacing: 1px;
+        }
+        .enter-btn:hover { 
+            transform: translateY(-2px); 
+            background: linear-gradient(45deg, #944f56, #542b34);
+            box-shadow: 0 6px 20px rgba(244, 162, 97, 0.4); 
+        }
+
+        #stage-area {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+            justify-content: flex-start;
+        }
+
+        /* ===================================================
+           3. 古典暗调巧克力淋面蛋糕 
+           =================================================== */
+        .fancy-cake {
+            position: relative;
+            margin: 15px auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .candles {
+            display: flex;
+            gap: 10px;
+            margin-bottom: -5px;
+            z-index: 6;
+            position: relative;
+        }
+        .candle-num {
+            font-size: 36px;
+            font-weight: 900;
+            font-family: 'Arial Black', sans-serif;
+            color: #f7e6e1; 
+            text-shadow:
+                -1px -1px 0 #9c5c64,  1px -1px 0 #9c5c64,
+                -1px  1px 0 #9c5c64,  1px  1px 0 #9c5c64,
+                 0 5px 0 #542229; 
+            position: relative;
+        }
+        
+        .candle-num::before {
+            content: '🔥';
+            font-size: 16px;
+            position: absolute;
+            top: -22px;
+            left: 50%;
+            transform: translateX(-50%);
+            filter: drop-shadow(0 0 5px #ffaa44) saturate(1.1);
+            text-shadow: none;
+            transition: opacity 0.5s ease;
+        }
+        .candle-num.extinguished::before {
+            content: '💨';
+            opacity: 0;
+            transform: translateX(-50%) translateY(-10px);
+            transition: all 0.8s ease;
+        }
+
+        .candle-num:nth-child(1):not(.extinguished)::before { animation: flicker 0.4s ease-in-out infinite alternate; }
+        .candle-num:nth-child(2):not(.extinguished)::before { animation: flicker 0.55s ease-in-out infinite alternate-reverse; }
+
+        .tier {
+            background: #fdf5f2; 
+            position: relative;
+            border-radius: 8px 8px 4px 4px;
+            box-shadow: inset -12px 0 15px rgba(44,20,25,0.12); 
+        }
+        .choco-top {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 18px;
+            background: #2b1411; 
+            border-radius: 8px 8px 3px 3px;
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.05);
+        }
+        .drip {
+            position: absolute;
+            background: #2b1411;
+            border-radius: 0 0 10px 10px;
+            top: 15px; 
+            box-shadow: inset -2px -2px 3px rgba(0,0,0,0.3);
+        }
+
+        .tier-1 { width: 65px; height: 35px; z-index: 5; }
+        .tier-2 { width: 100px; height: 42px; margin-top: -2px; z-index: 4; }
+        .tier-3 { width: 140px; height: 50px; margin-top: -2px; z-index: 3; }
+
+        .t1-d1 { left: 10%; width: 10px; height: 15px; }
+        .t1-d2 { left: 45%; width: 12px; height: 10px; }
+        .t1-d3 { right: 15%; width: 13px; height: 18px; }
+
+        .t2-d1 { left: 8%; width: 12px; height: 20px; }
+        .t2-d2 { left: 32%; width: 14px; height: 14px; }
+        .t2-d3 { left: 55%; width: 10px; height: 22px; }
+        .t2-d4 { right: 10%; width: 15px; height: 16px; }
+
+        .t3-d1 { left: 5%; width: 13px; height: 16px; }
+        .t3-d2 { left: 22%; width: 16px; height: 26px; }
+        .t3-d3 { left: 45%; width: 12px; height: 12px; }
+        .t3-d4 { left: 65%; width: 14px; height: 22px; }
+        .t3-d5 { right: 8%; width: 16px; height: 18px; }
+
+        /* ===================================================
+           4. 艺术画室互动区（已替换为绘画工具组合）
+           =================================================== */
+        .art-stage {
+            position: relative;
+            width: 100%;
+            height: 240px;
+            margin-top: auto;
+            background: transparent; 
+        }
+
+        .art-tool {
+            position: absolute;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.28s;
+            /* 滤镜增强落日画室色彩对比度 */
+            filter: drop-shadow(0 6px 15px rgba(0,0,0,0.35)) brightness(1.05); 
+        }
+        .art-tool:hover {
+            transform: scale(1.25) translateY(-8px) !important;
+            filter: drop-shadow(0 12px 25px rgba(244, 162, 97, 0.5)) brightness(1.2);
+            z-index: 100 !important;
+        }
+
+        .shake-animation {
+            animation: shake 0.5s linear !important;
+        }
+
+        /* 微调了各个画具的大小和倾斜角度，错落堆叠更有画室艺术感 */
+        .tool-1 { left: 5%;   bottom: 95px;  font-size: 68px; transform: rotate(-10deg); z-index: 10; } 
+        .tool-2 { right: 8%;  bottom: 110px; font-size: 60px; transform: rotate(15deg);  z-index: 11; } 
+        .tool-3 { left: 16%;  bottom: -5px;  font-size: 80px; transform: rotate(8deg);   z-index: 20; } 
+        .tool-4 { right: 14%; bottom: -10px; font-size: 82px; transform: rotate(-12deg); z-index: 21; } 
+        .tool-5 { left: 43%;  bottom: 35px;  font-size: 55px; transform: rotate(-20deg); z-index: 15; } 
+
+        /* ===================================================
+           5. 弹窗与动画
+           =================================================== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(30, 15, 18, 0.6);
+            backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1200;
+        }
+        .modal-content {
+            background: #ffffff;
+            color: #422125; 
+            padding: 30px;
+            border-radius: 24px;
+            max-width: 350px;
+            width: 80%;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            animation: popup 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid #e5ccb8; 
+        }
+        .close-btn {
+            background: #7c4147;
+            color: white;
+            border: none;
+            padding: 10px 32px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .close-btn:hover { background: #422129; }
+
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scale(0.95); opacity: 0.85; }
+            100% { transform: translateX(-52%) scale(1.12); opacity: 1; }
+        }
+        @keyframes popup {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes shake {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            10% { transform: translate(-4px, -2px) rotate(-5deg); }
+            20% { transform: translate(3px, 2px) rotate(5deg); }
+            30% { transform: translate(-3px, 3px) rotate(-3deg); }
+            40% { transform: translate(2px, -1px) rotate(4deg); }
+            50% { transform: translate(-2px, 2px) rotate(-4deg); }
+            60% { transform: translate(3px, 1px) rotate(3deg); }
+            70% { transform: translate(-2px, -2px) rotate(-3deg); }
+            80% { transform: translate(2px, 2px) rotate(2deg); }
+            90% { transform: translate(-1px, -1px) rotate(-1deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+
+        @media screen and (max-width: 500px) {
+            body { padding: 0; } 
+            .container { padding: 25px 15px 20px 15px; margin-left: auto; margin-right: auto; } 
+            h1.letter-title { font-size: 21px; margin-bottom: 10px; }
+            .letter-p { font-size: 13px; margin-bottom: 25px; line-height: 1.8; }
+            .fancy-cake { transform: scale(0.85); margin: 5px auto; }
+            .art-stage { height: 190px; }
+            .tool-1 { font-size: 56px; bottom: 75px; left: 4%; }
+            .tool-2 { font-size: 48px; bottom: 85px; right: 4%; }
+            .tool-3 { font-size: 70px; bottom: -5px; left: 10%; }
+            .tool-4 { font-size: 72px; bottom: -10px; right: 8%; }
+            .tool-5 { font-size: 46px; bottom: 25px; left: 40%; }
+            .modal-content { padding: 25px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="click-canvas"></canvas>
+    <canvas id="confetti-canvas"></canvas>
+
+    <div class="container">
+        <div id="intro-area" class="intro-area">
+            <h1 class="letter-title">El Mensaje Secreto</h1>
+            <p class="letter-p">
+                时光流淌，沉淀下最真挚的心意。<br>
+                这里为你精心封存了一份属于25岁的讯息，<br>
+                轻轻点击，开启这份专属的浪漫。
+            </p>
+            <button class="enter-btn" onclick="openLetter()">点击开启 ✉️</button>
+        </div>
+
+        <div id="stage-area">
+            <div class="fancy-cake">
+                <div class="candles" id="cake-candles">
+                    <div class="candle-num">2</div>
+                    <div class="candle-num">5</div>
+                </div>
+                <div class="tier tier-1">
+                    <div class="choco-top"></div>
+                    <div class="drip t1-d1"></div><div class="drip t1-d2"></div><div class="drip t1-d3"></div>
+                </div>
+                <div class="tier tier-2">
+                    <div class="choco-top"></div>
+                    <div class="drip t2-d1"></div><div class="drip t2-d2"></div><div class="drip t2-d3"></div><div class="drip t2-d4"></div>
+                </div>
+                <div class="tier tier-3">
+                    <div class="choco-top"></div>
+                    <div class="drip t3-d1"></div><div class="drip t3-d2"></div><div class="drip t3-d3"></div><div class="drip t3-d4"></div><div class="drip t3-d5"></div>
+                </div>
+            </div>
+            
+            <h2 style="color: #fce7ca; margin: 5px 0 2px 0; font-size: 19px; text-shadow: 0 1px 4px rgba(0,0,0,0.3);">¡Feliz Cumpleaños!</h2>
+            <p id="hint-text" style="color: #e5ccb8; font-size: 12px; margin: 0 0 5px 0; font-weight: 500; transition: color 0.3s;">
+                靠近麦克风【用力吹气】吹灭25岁蜡烛吧！
+            </p>
+            
+            <div class="art-stage">
+                <div class="art-tool tool-1" onclick="handleToolClick(this, 0)" title="调配调色盘的秘密色彩">🎨</div>
+                <div class="art-tool tool-2" onclick="handleToolClick(this, 1)" title="擦亮艺术画笔的祝福">🖌️</div>
+                <div class="art-tool tool-3" onclick="handleToolClick(this, 2)" title="开启深海珍珠颜料瓶">🧪</div>
+                <div class="art-tool tool-4" onclick="handleToolClick(this, 3)" title="揭开暮色画架上的心意">🖼️</div>
+                <div class="art-tool tool-5" onclick="handleToolClick(this, 4)" title="握住鎏金画刀的专属彩蛋">✨</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="wishes-modal" class="modal">
+        <div class="modal-content">
+            <h3 id="friend-name" style="color: #7c4147; margin-top: 0; font-size: 19px;"></h3>
+            <p id="friend-text" style="line-height: 1.6; font-size: 15px; color: #422125; font-weight: 500;"></p>
+            <button class="close-btn" onclick="closeModal()">珍藏 💾</button>
+        </div>
+    </div>
+
+    <script>
+        // ===================================================
+        // 数据源与基础逻辑
+        // ===================================================
+        const dataWishes = [
+            { name: "Wennie", text: "祝你 25 岁生日快乐！愿你新的一岁天天开心，所有实验都能顺利跑通！✨" },
+            { name: "🐻老师", text: "祝你永远充满活力！愿你在新的一岁里收获满满的幸福和好运。🎂" },
+            { name: "朋友 C", text: "25岁大快乐呀！愿你的未来像星空一样璀璨，心想事成！🎉" },
+            { name: "神秘人 D", text: "新的一岁，愿你像抽到‘命运之轮’一样，迎来充满惊喜的转机与连连好运！🌟" },
+            { name: "你的专属彩蛋", text: "生日快乐！这是我特意为你一行行代码敲出来的网页礼物，希望这片充满流光的暗紫深海能让你开心！😊" }
+        ];
+
+        let isExtinguished = false;
+
+        function openLetter() {
+            document.getElementById('intro-area').style.display = 'none';
+            document.getElementById('stage-area').style.display = 'flex';
+            initBlowDetection();
+        }
+
+        // 画具点击处理
+        function handleToolClick(element, index) {
+            if (element.classList.contains('shake-animation')) return;
+            element.classList.add('shake-animation');
+            setTimeout(() => {
+                element.classList.remove('shake-animation');
+                openGift(index);
+            }, 500);
+        }
+
+        function openGift(index) {
+            document.getElementById('friend-name').innerText = `来自：${dataWishes[index].name}`;
+            document.getElementById('friend-text').innerText = dataWishes[index].text;
+            document.getElementById('wishes-modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('wishes-modal').style.display = 'none';
+        }
+
+        // ===================================================
+        // 效果一：麦克风吹气检测
+        // ===================================================
+        function initBlowDetection() {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(function(stream) {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const analyser = audioContext.createAnalyser();
+                    const microphone = audioContext.createMediaStreamSource(stream);
+                    const javascriptNode = audioContext.createScriptProcessor(2048, 1, 1);
+
+                    analyser.smoothingTimeConstant = 0.3;
+                    analyser.fftSize = 1024;
+
+                    microphone.connect(analyser);
+                    analyser.connect(javascriptNode);
+                    javascriptNode.connect(audioContext.destination);
+
+                    javascriptNode.onaudioprocess = function() {
+                        if (isExtinguished) return;
+                        const array = new Uint8Array(analyser.frequencyBinCount);
+                        analyser.getByteFrequencyData(array);
+                        let values = 0;
+                        const length = array.length;
+                        for (let i = 0; i < length; i++) { values += array[i]; }
+                        const average = values / length;
+
+                        if (average > 65) {
+                            extinguishCandles();
+                            stream.getTracks().forEach(track => track.stop());
+                        }
+                    };
+                })
+                .catch(function(err) {
+                    setTimeout(extinguishCandles, 4000);
+                });
+            } else {
+                setTimeout(extinguishCandles, 4000);
+            }
+        }
+
+        function extinguishCandles() {
+            if (isExtinguished) return;
+            isExtinguished = true;
+
+            const candles = document.querySelectorAll('.candle-num');
+            candles.forEach(c => c.classList.add('extinguished'));
+
+            const hint = document.getElementById('hint-text');
+            hint.innerText = "✨ 25岁的烛光已化作心愿，画室彩蛋已全部解锁！";
+            hint.style.color = "#fce7ca";
+
+            startConfetti();
+        }
+
+        // ===================================================
+        // 效果二：点击爆开落日暖金粒子
+        // ===================================================
+        const clickCanvas = document.getElementById('click-canvas');
+        const ctxClick = clickCanvas.getContext('2d');
+        let clickParticles = [];
+
+        function resizeClickCanvas() {
+            clickCanvas.width = window.innerWidth;
+            clickCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeClickCanvas);
+        resizeClickCanvas();
+
+        class ClickParticle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 6 + 4;
+                this.speedX = (Math.random() - 0.5) * 6;
+                this.speedY = (Math.random() - 0.5) * 6;
+                const colors = ['rgba(138, 93, 168, 0.8)', 'rgba(252, 231, 202, 0.9)', 'rgba(235, 142, 133, 0.7)', 'rgba(244, 162, 97, 0.8)'];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.alpha = 1;
+                this.decay = Math.random() * 0.02 + 0.015;
+                this.isStar = Math.random() > 0.6;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.alpha -= this.decay;
+            }
+            draw() {
+                ctxClick.save();
+                ctxClick.globalAlpha = this.alpha;
+                ctxClick.fillStyle = this.color;
+                ctxClick.shadowBlur = 8;
+                ctxClick.shadowColor = this.color;
+                
+                ctxClick.beginPath();
+                if (this.isStar) {
+                    for (let i = 0; i < 4; i++) {
+                        ctxClick.lineTo(this.x + Math.cos(i * Math.PI / 2) * this.size, this.y + Math.sin(i * Math.PI / 2) * this.size);
+                        ctxClick.lineTo(this.x + Math.cos(i * Math.PI / 2 + Math.PI / 4) * (this.size/3), this.y + Math.sin(i * Math.PI / 2 + Math.PI / 4) * (this.size/3));
+                    }
+                } else {
+                    ctxClick.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                }
+                ctxClick.closePath();
+                ctxClick.fill();
+                ctxClick.restore();
+            }
+        }
+
+        window.addEventListener('click', (e) => {
+            for (let i = 0; i < 15; i++) {
+                clickParticles.push(new ClickParticle(e.clientX, e.clientY));
+            }
+        });
+
+        // ===================================================
+        // 效果三：满屏暖夕阳纸屑雨
+        // ===================================================
+        const confettiCanvas = document.getElementById('confetti-canvas');
+        const ctxConfetti = confettiCanvas.getContext('2d');
+        let confettiParticles = [];
+
+        function resizeConfettiCanvas() {
+            confettiCanvas.width = window.innerWidth;
+            confettiCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeConfettiCanvas);
+        resizeConfettiCanvas();
+
+        class ConfettiParticle {
+            constructor() {
+                this.x = Math.random() * confettiCanvas.width;
+                this.y = Math.random() * -confettiCanvas.height - 20;
+                this.size = Math.random() * 8 + 6;
+                this.speedX = (Math.random() - 0.5) * 3;
+                this.speedY = Math.random() * 3 + 4;
+                const colors = ['#fce7ca', '#eb8e85', '#7c4147', '#e5ccb8', '#ffaa44', '#8a5da8'];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.rotation = Math.random() * 360;
+                this.rotationSpeed = (Math.random() - 0.5) * 5;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.rotation += this.rotationSpeed;
+            }
+            draw() {
+                ctxConfetti.save();
+                ctxConfetti.translate(this.x, this.y);
+                ctxConfetti.rotate(this.rotation * Math.PI / 180);
+                ctxConfetti.fillStyle = this.color;
+                ctxConfetti.fillRect(-this.size / 2, -this.size / 4, this.size, this.size / 2);
+                ctxConfetti.restore();
+            }
+        }
+
+        function startConfetti() {
+            for (let i = 0; i < 120; i++) {
+                confettiParticles.push(new ConfettiParticle());
+            }
+        }
+
+        function animate() {
+            ctxClick.clearRect(0, 0, clickCanvas.width, clickCanvas.height);
+            for (let i = clickParticles.length - 1; i >= 0; i--) {
+                clickParticles[i].update();
+                if (clickParticles[i].alpha <= 0) { clickParticles.splice(i, 1); } 
+                else { clickParticles[i].draw(); }
+            }
+
+            ctxConfetti.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+            for (let i = confettiParticles.length - 1; i >= 0; i--) {
+                confettiParticles[i].update();
+                if (confettiParticles[i].y > confettiCanvas.height) { confettiParticles.splice(i, 1); } 
+                else { confettiParticles[i].draw(); }
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>
