@@ -23,6 +23,7 @@
             background-repeat: no-repeat; 
             position: relative;
             box-sizing: border-box;
+            background-color: #24161a; 
         }
 
         /* 粒子与彩带画布 */
@@ -293,33 +294,38 @@
             100% { transform: translate(0, 0) rotate(0deg); }
         }
 
+        /* ===================================================
+           ✨ 手机端终极适配修复（重新强制声明图源，实现完美卡位）
+           =================================================== */
         @media screen and (max-width: 500px) {
             body { 
                 padding: 0; 
-                background-size: cover; 
-                background-position: 28% 5%;
-                
                 flex-direction: column;
                 justify-content: flex-end; /* 让卡片绝对沉底 */
                 align-items: center;
+                
+                /* 核心修复：必须在手机端重新声明一次本地背景图地址，下方的定位才会生效 */
+                background-image: url('bg.jpg'); 
+                background-size: cover; 
+                /* 精确制导：27%可以让偏左的祁煜帅脸瞬间挪到手机屏幕中央，2%将他的脸部和发饰高度完美提起来 */
+                background-position: 27% 2%; 
             } 
             .container { 
                 padding: 20px 15px 12px 15px; 
                 margin-left: auto; 
                 margin-right: auto; 
                 
-                /* 3. ✨ 提高卡片的透明度（从0.78降到0.55），变成超高级的微醺磨砂滤镜，让他的衣服线条隐约透过来 */
+                /* 超高级微醺磨砂滤镜，让衣服线条隐约透过来 */
                 background: rgba(36, 26, 36, 0.55); 
                 backdrop-filter: blur(16px); 
                 -webkit-backdrop-filter: blur(16px);
                 
-                /* 4. ✨ 严格限制卡片高度只占屏幕下半段（42%），绝对不会向上蔓延挡到他的脸 */
+                /* 限制卡片高度只占屏幕下半段（42%），绝对不会向上挡到他的下巴 */
                 min-height: auto; 
                 height: 42dvh; 
                 max-height: 42dvh;
                 width: 90%; 
                 
-                /* 5. 沉底安全间距 */
                 margin-top: 0;
                 margin-bottom: 20px; 
                 
@@ -327,11 +333,11 @@
                 box-shadow: 0 -5px 30px rgba(0,0,0,0.3), 0 10px 20px rgba(0,0,0,0.5);
             } 
             
-            /* 6. 精简文字排版，压缩垂直空间 */
+            /* 精简文字排版，压缩垂直空间 */
             h1.letter-title { font-size: 18px; margin-bottom: 6px; }
             .letter-p { font-size: 12px; margin-bottom: 12px; line-height: 1.6; }
             
-            /* 7. ✨ 舞台页组件微调，让大蛋糕和画具在矮卡片里完美舒展 */
+            /* 舞台页组件微调，让大蛋糕和画具在矮卡片里完美舒展 */
             .fancy-cake { transform: scale(0.62); margin: -15px auto 0 auto; } 
             h2 { font-size: 15px !important; margin: 0 0 2px 0 !important; }
             #hint-text { font-size: 10px !important; margin: 0 0 2px 0 !important; }
@@ -349,17 +355,14 @@
 </head>
 <body>
 
-    <!-- ✨ 音乐标签保底：如果想加音乐，把你的mp3文件命名为 bgm.mp3 传到同目录下即可 -->
     <audio id="bg-music" loop>
         <source src="bgm.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- 动效画布 -->
     <canvas id="click-canvas"></canvas>
     <canvas id="confetti-canvas"></canvas>
 
     <div class="container">
-        <!-- 首页 -->
         <div id="intro-area" class="intro-area">
             <h1 class="letter-title">Happy Birthday to you❤</h1>
             <p class="letter-p">
@@ -370,9 +373,7 @@
             <button class="enter-btn" onclick="openLetter()">点击开启 ✉️</button>
         </div>
 
-        <!-- 舞台页 -->
         <div id="stage-area">
-            <!-- 巧克力大蛋糕 -->
             <div class="fancy-cake" title="点击许愿吹灭蜡烛">
                 <div class="candles" id="cake-candles">
                     <div class="candle-num">2</div>
@@ -397,7 +398,6 @@
                 ✨ 轻轻【点击蛋糕】许下你的25岁心愿吧！
             </p>
             
-            <!-- 绘画艺术工具组合区 -->
             <div class="art-stage">
                 <div class="art-tool tool-1" onclick="handleToolClick(this, 0)" title="调配调色盘的秘密色彩">🎨</div>
                 <div class="art-tool tool-2" onclick="handleToolClick(this, 1)" title="擦亮艺术画笔的祝福">🖌️</div>
@@ -408,7 +408,6 @@
         </div>
     </div>
 
-    <!-- 弹窗 -->
     <div id="wishes-modal" class="modal">
         <div class="modal-content">
             <h3 id="friend-name" style="color: #7c4147; margin-top: 0; font-size: 19px;"></h3>
@@ -418,15 +417,12 @@
     </div>
 
     <script>
-        // ===================================================
-        // 数据源与基础逻辑
-        // ===================================================
         const dataWishes = [
            { name: "奶茶", text: "希望你能一直做自己，一直在自己热爱的生活然后逢考必过，答辩顺利。平安喜乐永远伴随你，不止生日快乐，希望你每一天都快乐！" },
             { name: "🐻", text: "首先祝我们的禾家禾家生日快乐，25岁生日快乐！祝你在未来的生活顺风顺水，一直开心，祝你永远不死ovo。我们的禾家禾家今年也要成功的读完master了，知道你一直觉得很累很紧张，但是你还是成功做到了。希望在未来你也能百战百胜，一直成功" },
             { name: "朋友 C", text: "25岁大快乐呀！愿你的未来像星空一样璀璨，心想事成！🎉" },
             { name: "夜苏苏nakiayayu草草草楚晓雪窈窈杜老师katsu", text: "上一次你过生日还是在去年，今天你又过生日了，过了今天你就长了一岁，虚岁要加两岁，希望你冬天要多穿点不然会冷，饿了要吃饭不然会饿，下雨记得打伞不然要淋湿，渴了要喝水不然会渴，困了就睡觉，不然没精神" },
-            { name: "爱你的三草姐", text: "生日快乐🎆🎆🍰🍰🎂🎂🎁 ❤️ 💚 💛 💙 💜 🧡 💖 （放声歌唱🗣🎙 🎼 ）（兴奋爬上树🌴🌲🌳 ）（光翼展开飞行🧚‍♀️ ）（健康♻️ 且适度✅ 地爬行💪 ）（口哨💋 ）（露出很甜🎀 的笑容😁 ）（健康地蠕动👍 ）（3600º ☁️ 螺旋式翻滚🌪 ）（拉着气球🎈 飞向天空🌌 ）（撒下飞吻💋么么么👩🏻‍❤️‍💋‍👩🏻👩🏻‍❤️‍💋‍👩🏻👩🏻‍❤️‍💋‍👩🏻）（展开瞬移魔法💫 来到宝贝面前）（激动💗 地跺脚👣 ）（兴奋地大喊🗣 🔊 ）（高声唱着生日歌🎂 🗣 〰 🎶 〰 🎵 🎼 🎶 〰 ）（献出精心💖 挑选的花束🌸🌷）（娇羞[害羞]地递出🌸🌷）" }
+            { name: "爱你的三草姐", text: "生日快乐🎆🎆🍰🍰🎂🎂🎁 ❤️ 💚 💛 💙 💜 🧡 💖 （放声歌唱🗣🎙 🎼 ）（兴奋爬上树🌴🌲🌳 ）（光翼展开飞行🧚‍♀️ ）（健康♻️ 且适度✅ 地爬行💪 ）（口哨💋 ）（露出很甜🎀 的笑容😁 ）（健康地蠕动👍 ）（3600º ☁️ 螺旋式翻滚🌪 ）（拉着气球🎈 飞向天空🌌 ）（撒下飞吻💋么么么👩🏻‍❤️‍💋‍👩形👩🏻‍❤️‍💋‍👩🏻👩🏻‍❤️‍💋‍👩🏻）（展开瞬移魔法💫 来到宝贝面前）（激动💗 地跺脚👣 ）（兴奋地大喊🗣 🔊 ）（高声唱着生日歌🎂 🗣 〰 🎶 〰 🎵 🎼 🎶 〰 ）（献出精心💖 挑选的花束🌸🌷）（娇羞[害羞]地递出🌸🌷）" }
         ];
 
         let isExtinguished = false;
@@ -435,7 +431,6 @@
             document.getElementById('intro-area').style.display = 'none';
             document.getElementById('stage-area').style.display = 'flex';
             
-            // ✨ 激活背景音乐播放
             const music = document.getElementById('bg-music');
             if (music) {
                 music.play().catch(err => console.log("音乐暂未成功播放:", err));
@@ -478,9 +473,6 @@
             startConfetti();
         }
 
-        // ===================================================
-        // 特效一：点击发光粒子
-        // ===================================================
         const clickCanvas = document.getElementById('click-canvas');
         const ctxClick = clickCanvas.getContext('2d');
         let clickParticles = [];
@@ -542,9 +534,6 @@
         window.addEventListener('click', handleEvent);
         window.addEventListener('touchstart', handleEvent, {passive: true});
 
-        // ===================================================
-        // 特效二：满屏彩带
-        // ===================================================
         const confettiCanvas = document.getElementById('confetti-canvas');
         const ctxConfetti = confettiCanvas.getContext('2d');
         let confettiParticles = [];
