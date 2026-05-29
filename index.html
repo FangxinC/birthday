@@ -299,30 +299,32 @@
         @media screen and (max-width: 500px) {
             body { 
                 padding: 0; 
-                /* 让背景图微调，把脸部更完美地放在靠上中央 */
-                background-position: 15% center; 
-                /* 关键改动：让手机端的所有内容全部「靠底部对齐」，完美空出上半部分的脸 */
+                /* 手机不裁切拉伸背景：让图片完整地刚好平铺满手机宽度，并对齐顶部 */
+                background-size: 100% auto; 
+                background-position: center top; 
+                /* 核心：将手机容器彻底下沉对齐，留出上半屏幕 */
                 align-items: flex-end; 
             } 
             .container { 
-                padding: 25px 15px 20px 15px; 
+                padding: 22px 15px 15px 15px; 
                 margin-left: auto; 
                 margin-right: auto; 
-                /* 稍微缩减高度，给手机上方留出更多看脸的空间 */
-                min-height: 480px; 
-                max-height: 75vh; 
-                /* 底部留出25px的安全距离，防止贴死手机底边 */
-                margin-bottom: 25px; 
+                /* 精简卡片高度，绝不遮挡上方的祁煜帅脸 */
+                min-height: 440px; 
+                max-height: 55vh; 
+                margin-bottom: 12px; 
+                border-radius: 24px;
+                box-shadow: 0 -10px 40px rgba(0,0,0,0.5), 0 15px 30px rgba(0,0,0,0.7);
             } 
-            h1.letter-title { font-size: 20px; margin-bottom: 8px; }
-            .letter-p { font-size: 13px; margin-bottom: 20px; line-height: 1.7; }
-            .fancy-cake { transform: scale(0.72); margin: 0 auto; } /* 缩小蛋糕防止挤压 */
-            .art-stage { height: 160px; } /* 稍微压缩画具高度 */
-            .tool-1 { font-size: 52px; bottom: 65px; left: 2%; }
-            .tool-2 { font-size: 44px; bottom: 75px; right: 2%; }
-            .tool-3 { font-size: 65px; bottom: -5px; left: 8%; }
-            .tool-4 { font-size: 66px; bottom: -10px; right: 6%; }
-            .tool-5 { font-size: 42px; bottom: 20px; left: 38%; }
+            h1.letter-title { font-size: 19px; margin-bottom: 6px; }
+            .letter-p { font-size: 12px; margin-bottom: 15px; line-height: 1.6; }
+            .fancy-cake { transform: scale(0.65); margin: -10px auto 0 auto; } 
+            .art-stage { height: 140px; } 
+            .tool-1 { font-size: 46px; bottom: 55px; left: 1%; }
+            .tool-2 { font-size: 38px; bottom: 65px; right: 1%; }
+            .tool-3 { font-size: 58px; bottom: -5px; left: 6%; }
+            .tool-4 { font-size: 58px; bottom: -8px; right: 4%; }
+            .tool-5 { font-size: 36px; bottom: 15px; left: 38%; }
             .modal-content { padding: 25px 20px; }
         }
     </style>
