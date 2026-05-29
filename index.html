@@ -296,34 +296,47 @@
         /* ===================================================
            ✨ 终极优化：移动端响应式布局（卡片沉底，露出祁煜帅脸）
            =================================================== */
+        /* ===================================================
+           ✨ 手机端终极适配：全景比例不失真，绝不挡脸
+           =================================================== */
         @media screen and (max-width: 500px) {
             body { 
                 padding: 0; 
-                /* 手机不裁切拉伸背景：让图片完整地刚好平铺满手机宽度，并对齐顶部 */
-                background-size: 100% auto; 
+                /* 1. ✨ 核心修改：改为 contain，确保横版原图完美等比例缩放，绝对不裁剪脸部和头饰 */
+                background-size: contain; 
                 background-position: center top; 
-                /* 核心：将手机容器彻底下沉对齐，留出上半屏幕 */
-                align-items: flex-end; 
+                /* 2. 纵向排列：让图片在上面，卡片紧跟在下面 */
+                flex-direction: column;
+                justify-content: flex-end;
+                align-items: center;
             } 
             .container { 
-                padding: 22px 15px 15px 15px; 
+                padding: 30px 20px 25px 20px; 
                 margin-left: auto; 
                 margin-right: auto; 
-                /* 精简卡片高度，绝不遮挡上方的祁煜帅脸 */
-                min-height: 440px; 
-                max-height: 55vh; 
-                margin-bottom: 12px; 
+                /* 3. ✨ 核心修改：缩短卡片固定高度，改用自适应内容，防止挤压 */
+                min-height: auto; 
+                height: 50vh; /* 卡片只占屏幕下半段 */
+                max-height: 50vh;
+                width: 92%; /* 稍微加宽一点，让排版更舒展 */
+                
+                /* 4. ✨ 核心修改：利用负数 margin 让卡片微微往上提，和上方的美图产生优雅的物理层叠感 */
+                margin-top: -40px; 
+                margin-bottom: 25px; 
+                
                 border-radius: 24px;
-                box-shadow: 0 -10px 40px rgba(0,0,0,0.5), 0 15px 30px rgba(0,0,0,0.7);
+                box-shadow: 0 -15px 40px rgba(0,0,0,0.5), 0 15px 30px rgba(0,0,0,0.6);
             } 
-            h1.letter-title { font-size: 19px; margin-bottom: 6px; }
-            .letter-p { font-size: 12px; margin-bottom: 15px; line-height: 1.6; }
-            .fancy-cake { transform: scale(0.65); margin: -10px auto 0 auto; } 
-            .art-stage { height: 140px; } 
-            .tool-1 { font-size: 46px; bottom: 55px; left: 1%; }
-            .tool-2 { font-size: 38px; bottom: 65px; right: 1%; }
-            .tool-3 { font-size: 58px; bottom: -5px; left: 6%; }
-            .tool-4 { font-size: 58px; bottom: -8px; right: 4%; }
+            h1.letter-title { font-size: 21px; margin-bottom: 12px; }
+            .letter-p { font-size: 13px; margin-bottom: 20px; line-height: 1.8; }
+            
+            /* 舞台页内部小组件比例缩放 */
+            .fancy-cake { transform: scale(0.68); margin: -5px auto 0 auto; } 
+            .art-stage { height: 135px; } 
+            .tool-1 { font-size: 46px; bottom: 50px; left: 1%; }
+            .tool-2 { font-size: 38px; bottom: 60px; right: 1%; }
+            .tool-3 { font-size: 55px; bottom: -5px; left: 6%; }
+            .tool-4 { font-size: 55px; bottom: -8px; right: 4%; }
             .tool-5 { font-size: 36px; bottom: 15px; left: 38%; }
             .modal-content { padding: 25px 20px; }
         }
